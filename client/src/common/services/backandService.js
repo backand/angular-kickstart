@@ -15,6 +15,10 @@
       return Backand.object.getList(name, params);
     };
 
+    factory.getOne = function(name, id) {
+      return Backand.object.getOne(name, id);
+    }
+
     factory.signin = function(username, password) {
 
       return Backand.signin(username, password);

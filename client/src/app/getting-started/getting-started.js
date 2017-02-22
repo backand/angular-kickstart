@@ -31,6 +31,7 @@
       vm.password = 'backand';
       vm.appName = 'bkndkickstart';
       vm.objectSelected = 'users';
+      vm.objectSelectedId = 1;
       vm.objects = null;
       vm.isLoggedIn = false;
       vm.objectData = '{}';
@@ -64,6 +65,15 @@
     };
 
     function loadObjectDataSuccess(ObjectData) {
+      vm.objectData = ObjectData.data;
+    }
+
+    vm.getOne = function() {
+      BackandService.getOne(vm.objectSelected, vm.objectSelectedId).then(getOneSuccess, errorHandler);
+    };
+
+    function getOneSuccess(ObjectData) {
+      // For simplicity, reuse vm.objectData for now
       vm.objectData = ObjectData.data;
     }
 

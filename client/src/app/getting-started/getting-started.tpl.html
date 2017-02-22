@@ -31,6 +31,9 @@
     <h3 ng-if="vm.isLoggedIn">Example of using data load API (username: {{vm.username}})</h3>
     <label>Name of an object: </label><input ng-model="vm.objectSelected" value="users"/>
     <input type="button" class="button-large" ng-click="vm.loadObjectData()" value="Load Data"/>
+    <br />
+    <label>ID of an object: </label><input ng-model="vm.objectSelectedId" value="1"/>
+    <input type="button" class="button-large" ng-click="vm.getOne()" value="Load One Record"/>
 
     <hr/>
     <h3>Object - Example of using data API</h3>

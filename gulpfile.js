@@ -20,7 +20,7 @@ var webdriverUpdate = require('gulp-protractor').webdriver_update;
 gulp.task('webdriver:update', webdriverUpdate);
 
 // run unit tests and watch files
-gulp.task('tdd', function(cb) {
+gulp.task('tdd', function (cb) {
   karma.start(_.assign({}, karmaConfig, {
     singleRun: false,
     action: 'watch',
@@ -29,7 +29,7 @@ gulp.task('tdd', function(cb) {
 });
 
 // run unit tests with travis CI
-gulp.task('travis', ['build'], function(cb) {
+gulp.task('travis', ['build'], function (cb) {
   karma.start(_.assign({}, karmaConfig, {
     singleRun: true,
     browsers: ['PhantomJS']
@@ -37,7 +37,7 @@ gulp.task('travis', ['build'], function(cb) {
 });
 
 // optimize images and put them in the dist folder
-gulp.task('images', function() {
+gulp.task('images', function () {
   return gulp.src(config.images)
     .pipe($.imagemin({
       progressive: true,
@@ -50,15 +50,15 @@ gulp.task('images', function() {
 });
 
 //generate angular templates using html2js
-gulp.task('templates', function() {
+gulp.task('templates', function () {
   return gulp.src(config.tpl)
     .pipe($.changed(config.tmp))
-    .pipe($.html2js({
-      outputModuleName: 'templates',
+    .pipe($.html2js('templates.js', {
+      adapter: 'angular',
+      name: 'templates',
       base: 'client',
       useStrict: true
     }))
-    .pipe($.concat('templates.js'))
     .pipe(gulp.dest(config.tmp))
     .pipe($.size({
       title: 'templates'
@@ -66,7 +66,7 @@ gulp.task('templates', function() {
 });
 
 //generate css files from scss sources
-gulp.task('sass', function() {
+gulp.task('sass', function () {
   return gulp.src(config.mainScss)
     .pipe($.sass())
     .on('error', $.sass.logError)
@@ -77,17 +77,17 @@ gulp.task('sass', function() {
 });
 
 //build files for creating a dist release
-gulp.task('build:dist', ['clean'], function(cb) {
+gulp.task('build:dist', ['clean'], function (cb) {
   runSequence(['jshint', 'build', 'copy', 'copy:assets', 'images'], 'html', cb);
 });
 
 //build files for development
-gulp.task('build', ['clean'], function(cb) {
+gulp.task('build', ['clean'], function (cb) {
   runSequence(['sass', 'templates'], cb);
 });
 
 //generate a minified css files, 2 js file, change theirs name to be unique, and generate sourcemaps
-gulp.task('html', function() {
+gulp.task('html', function () {
   var assets = $.useref.assets({
     searchPath: '{build,client}'
   });
@@ -118,23 +118,23 @@ gulp.task('html', function() {
 });
 
 //copy assets in dist folder
-gulp.task('copy:assets', function() {
+gulp.task('copy:assets', function () {
   return gulp.src(config.assets, {
-      dot: true
-    }).pipe(gulp.dest(config.dist + '/assets'))
+    dot: true
+  }).pipe(gulp.dest(config.dist + '/assets'))
     .pipe($.size({
       title: 'copy:assets'
     }));
 });
 
 //copy assets in dist folder
-gulp.task('copy', function() {
+gulp.task('copy', function () {
   return gulp.src([
-      config.base + '/*',
-      '!' + config.base + '/*.html',
-      '!' + config.base + '/src',
-      '!' + config.base + '/test'
-    ]).pipe(gulp.dest(config.dist))
+    config.base + '/*',
+    '!' + config.base + '/*.html',
+    '!' + config.base + '/src',
+    '!' + config.base + '/test'
+  ]).pipe(gulp.dest(config.dist))
     .pipe($.size({
       title: 'copy'
     }));
@@ -144,7 +144,7 @@ gulp.task('copy', function() {
 gulp.task('clean', del.bind(null, [config.dist, config.tmp]));
 
 //lint files
-gulp.task('jshint', function() {
+gulp.task('jshint', function () {
   return gulp.src(config.js)
     .pipe(reload({
       stream: true,
@@ -162,30 +162,30 @@ gulp.task('jshint', function() {
 gulp.task('default', ['serve']); //
 
 //run unit tests and exit
-gulp.task('test:unit', ['build'], function(cb) {
+gulp.task('test:unit', ['build'], function (cb) {
   karma.start(_.assign({}, karmaConfig, {
     singleRun: true
   }), cb);
 });
 
 // Run e2e tests using protractor, make sure serve task is running.
-gulp.task('test:e2e', ['webdriver:update'], function() {
+gulp.task('test:e2e', ['webdriver:update'], function () {
   return gulp.src(protractorConfig.config.specs)
     .pipe($.protractor.protractor({
       configFile: 'build/protractor.config.js'
     }))
-    .on('error', function(e) {
+    .on('error', function (e) {
       throw e;
     });
 });
 
 //run the server,  watch for file changes and redo tests.
-gulp.task('serve:tdd', function(cb) {
+gulp.task('serve:tdd', function (cb) {
   runSequence(['serve', 'tdd'], cb);
 });
 
 //run the server after having built generated files, and watch for changes
-gulp.task('serve', ['build'], function() {
+gulp.task('serve', ['build'], function () {
   browserSync({
     notify: false,
     logPrefix: pkg.name,
@@ -200,7 +200,7 @@ gulp.task('serve', ['build'], function() {
 });
 
 //run the app packed in the dist folder
-gulp.task('serve:dist', ['build:dist'], function() {
+gulp.task('serve:dist', ['build:dist'], function () {
   browserSync({
     notify: false,
     server: [config.dist]

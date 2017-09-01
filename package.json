@@ -44,13 +44,9 @@
     "karma-html-reporter": "~0.2.6",
     "karma-jasmine": "~1.1.0",
     "karma-mocha-reporter": "~2.2.4",
-    "karma-phantomjs-launcher": "~1.0.4",
     "lodash": "~4.17.4",
     "protractor": "~5.1.2",
     "run-sequence": "~2.1.0"
-  },
-  "engines": {
-    "node": ">=0.10.x"
   },
   "scripts": {
     "test": "gulp travis"
